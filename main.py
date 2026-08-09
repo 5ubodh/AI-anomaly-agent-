@@ -1,7 +1,7 @@
 from src.data_loader import load_data
 from src.anomaly_detector import detect_anomalies
 
-
+from src.summarizer import generate_summary
 file_path = "data/business_anomaly_agent_data.xlsx"
 
 
@@ -20,3 +20,6 @@ print("ANOMALIES DETECTED:")
 print()
 
 print(anomalies)
+summary = generate_summary(anomalies)
+print("\nBusiness Summary:")
+print(summary)

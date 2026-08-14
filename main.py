@@ -1,30 +1,42 @@
 from src.data_loader import load_data
 from src.anomaly_detector import detect_anomalies
-
 from src.summarizer import generate_summary
-from src.email_alert import create_email_alert
+from src.email_alert import create_email_alert, send_email
+
+
+# Excel file location
 file_path = "data/business_anomaly_agent_data.xlsx"
 
 
-# Load the Excel data
+# 1. Load the data
 df = load_data(file_path)
 
 print("Data loaded successfully!")
-print()
+print("=" * 50)
 
 
-# Detect anomalies
+# 2. Detect anomalies
 anomalies = detect_anomalies(df)
 
-
-print("ANOMALIES DETECTED:")
-print()
-
+print("\nDetected Anomalies:")
 print(anomalies)
+
+
+# 3. Generate business summary
 summary = generate_summary(anomalies)
-subject, body = create_email_alert(summary)
+
 print("\nBusiness Summary:")
 print(summary)
-print("\nEmail Alert:")
-print("Subject:", subject)
-print(body)
+
+
+# 4. Create email alert
+subject, body = create_email_alert(summary)
+
+
+# 5. Send email only if anomalies exist
+if not anomalies.empty:
+    print("\nSending email alert...")
+    send_email(subject, body)
+else:
+    print("\nNo anomalies detected.")
+    print("Email alert was not sent.")
